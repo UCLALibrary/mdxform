@@ -265,7 +265,9 @@ public class TransformationServlet extends HttpServlet {
 
                 try {
                     if (statusFile.createNewFile()) {
-                        LOGGER.info("Created status file for {}", myJobID);
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug("Created status file for {}", myJobID);
+                        }
                     }
                 } catch (final IOException details) {
                     if (LOGGER.isErrorEnabled()) {
@@ -277,7 +279,9 @@ public class TransformationServlet extends HttpServlet {
 
                 try {
                     if (statusFile.createNewFile()) {
-                        LOGGER.info("Created status file for {}", myJobID);
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug("Created status file for {}", myJobID);
+                        }
                     }
                 } catch (final IOException details) {
                     if (LOGGER.isErrorEnabled()) {
