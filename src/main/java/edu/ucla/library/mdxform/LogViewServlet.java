@@ -34,6 +34,9 @@ public class LogViewServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest aRequest, final HttpServletResponse aResponse)
             throws ServletException, IOException {
+        // Go ahead and tell the browser what we'll be returning
+        aResponse.setContentType("text/html;charset=UTF-8");
+
         final ServletOutputStream outStream = aResponse.getOutputStream();
         final Serializer serializer = new ViewerSerializer(outStream);
         final ServletContext context = getServletContext();
