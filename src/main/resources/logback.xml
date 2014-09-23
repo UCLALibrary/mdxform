@@ -1,0 +1,31 @@
+<configuration>
+    
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!--Daily rolling file appender -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>src/main/webapp/WEB-INF/mdxform.error.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>src/main/webapp/WEB-INF/mdxform.%d{yyyy-MM-dd}.error.log</FileNamePattern>
+            <maxHistory>14</maxHistory>
+        </rollingPolicy>
+ 
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- For now, let's see everything! -->
+    <logger name="edu.ucla.library.mdxform" level="DEBUG"/>
+
+    <root level="ERROR">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>

@@ -1,0 +1,84 @@
+div.well {
+  padding-top: 55px;
+}
+
+form {
+  margin-left: 30px;
+}
+
+table {
+  margin-top: 20px;
+  width: 100%;
+}
+
+td, th {
+  padding-top: 10px;
+  padding-right: 20px;
+}
+
+th {
+  padding-bottom: 10px;
+}
+
+tr:nth-child(even) {
+  background: #eee;
+}
+
+/* Don't alternate colors on our main page table */
+tr#zip-file {
+  background: #fff;
+}
+
+#transform, #refresh, #deleted {
+  margin-top: 20px;
+}
+
+#refresh {
+  margin-left: 0px;
+}
+
+#time {
+  color: navy;
+}
+
+#thread {
+  color: green;
+}
+
+#level {
+  color: purple;
+}
+
+#class {
+  color: blue;
+}
+
+#message {
+  color: #666;
+}
+
+#logEntry {
+  padding: 5px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #f5f5f5;
+  padding-top: 10px;
+}

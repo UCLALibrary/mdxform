@@ -1,0 +1,182 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>edu.ucla.library</groupId>
+  <artifactId>mdxform</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>MdXForm</name>
+  <description>A simple metadata transformation Web interface</description>
+  <url>http://github.com/uclalibrary/mdxform</url>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:git:git@github.com:uclalibrary/mdxform.git</connection>
+    <developerConnection>scm:git:git@github.com:uclalibrary/mdxform.git</developerConnection>
+    <url>git@github.com:uclalibrary/mdxform.git</url>
+  </scm>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/uclalibrary/mdxform/issues</url>
+  </issueManagement>
+  <organization>
+    <name>UCLA Library</name>
+    <url>http://library.ucla.edu</url>
+  </organization>
+  <developers>
+    <developer>
+      <email>ksclarke@gmail.com</email>
+      <name>Kevin S. Clarke</name>
+      <url>http://kevinclarke.info</url>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>America/New_York</timezone>
+    </developer>
+  </developers>
+  <properties>
+    <!-- Default key which should be overridden in a settings.xml file -->
+    <jetty.stop.key>cough</jetty.stop.key>
+    <!-- Port at which Jetty runs (can be overridden on the command line) -->
+    <jetty.port>9191</jetty.port>
+    <!--  Which version of Jetty we're using -->
+    <jetty.version>9.2.3.v20140905</jetty.version>
+    <!-- Should not need to change these properties -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.0.13</version>
+    </dependency>
+    <dependency>
+      <groupId>info.freelibrary</groupId>
+      <artifactId>freelib-utils</artifactId>
+      <version>0.4.5</version>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.xom</groupId>
+      <artifactId>xom</artifactId>
+      <version>1.2.10</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.saxon</groupId>
+      <artifactId>Saxon-HE</artifactId>
+      <version>9.5.1-6</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <!-- Get a free port for the Jetty server to use -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.6</version>
+        <configuration>
+          <portNames>
+            <portName>jetty.stop.port</portName>
+          </portNames>
+        </configuration>
+        <executions>
+          <execution>
+            <id>reserve-port</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>reserve-network-port</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- Jetty plugin is how we run the GUI from within Maven -->
+      <plugin>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>${jetty.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.13</version>
+          </dependency>
+          <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>3.2.0</version>
+          </dependency>
+          <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <webApp>
+            <contextPath>/mdxform</contextPath>
+          </webApp>
+          <stopKey>${jetty.stop.key}</stopKey>
+          <stopPort>${jetty.stop.port}</stopPort>
+          <!-- 1 for developing; 0 for running on server -->
+          <scanIntervalSeconds>1</scanIntervalSeconds>
+          <!-- <scanTargets> <scanTarget>src/main/java/edu/ucla/library/metaxform</scanTarget> </scanTargets> -->
+          <requestLog implementation="org.eclipse.jetty.server.NCSARequestLog">
+            <filename>${basedir}/target/yyyy_mm_dd.request.log</filename>
+            <retainDays>30</retainDays>
+            <append>true</append>
+            <extended>false</extended>
+            <logTimeZone>GMT</logTimeZone>
+          </requestLog>
+        </configuration>
+      </plugin>
+      <!-- Properties plugin sets system properties for the jetty plugin -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>properties-maven-plugin</artifactId>
+        <version>1.0-alpha-2</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>set-system-properties</goal>
+            </goals>
+            <configuration>
+              <properties>
+                <property>
+                  <name>logback.configurationFile</name>
+                  <value>${basedir}/src/main/resources/logback.xml</value>
+                </property>
+                <property>
+                  <name>jetty.port</name>
+                  <value>${jetty.port}</value>
+                </property>
+                <property>
+                  <name>javax.xml.transform.TransformerFactory</name>
+                  <value>net.sf.saxon.TransformerFactoryImpl</value>
+                </property>
+              </properties>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- Compiler plugin sets minimum JDK version: 1.7 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.5.1</version>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
